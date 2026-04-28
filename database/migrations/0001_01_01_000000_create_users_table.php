@@ -11,14 +11,47 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 50)->unique();
+            $table->string('code', 10)->unique();
+            $table->boolean('isActive')->default(true);
+            $table->timestamp('createdAt')->useCurrent();
+            $table->unsignedBigInteger('createdBy');
+            $table->timestamp('updatedAt')->nullable()->useCurrentOnUpdate();
+            $table->unsignedBigInteger('updatedBy')->nullable();
+        });
+
+        Schema::create('permissions', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 50)->unique();
+            $table->string('code', 50)->unique();
+            $table->boolean('isActive')->default(true);
+            $table->timestamp('createdAt')->useCurrent();
+            $table->unsignedBigInteger('createdBy');
+            $table->timestamp('updatedAt')->nullable()->useCurrentOnUpdate();
+            $table->unsignedBigInteger('updatedBy')->nullable();
+        });
+
+        Schema::create('rolePermissions', function (Blueprint $table) {
+            $table->unsignedBigInteger('roleId');
+            $table->unsignedBigInteger('permissionId');
+            $table->primary(['roleId', 'permissionId']);
+            $table->foreign('roleId')->references('id')->on('roles')->cascadeOnDelete();
+            $table->foreign('permissionId')->references('id')->on('permissions')->cascadeOnDelete();
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->foreignId('roleId')->constrained('roles');
+            $table->string('name', 255);
+            $table->string('email', 255)->unique();
+            $table->string('password', 255);
+            $table->boolean('isActive')->default(true);
+            $table->timestamp('createdAt')->useCurrent();
+            $table->unsignedBigInteger('createdBy');
+            $table->timestamp('updatedAt')->nullable()->useCurrentOnUpdate();
+            $table->unsignedBigInteger('updatedBy')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -42,8 +75,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('rolePermissions');
+        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('roles');
     }
 };
