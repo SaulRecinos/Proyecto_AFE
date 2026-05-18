@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /**
-     * Muestra el formulario (un solo botón; aún no se valida email/contraseña).
-     */
     public function create(): View|RedirectResponse
     {
         if (auth()->check()) {
@@ -23,21 +20,29 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Inicia sesión como el usuario administrador de seed (o el primero en BD).
-     */
     public function store(Request $request): RedirectResponse
     {
-        $user = User::query()
-            ->where('email', 'admin@proyectoafe.com')
-            ->first()
-            ?? User::query()->orderBy('id')->first();
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
 
-        if ($user === null) {
-            return back()->with('error', 'No hay usuarios. Ejecuta: php artisan db:seed --class=AdminModuleSeeder');
+        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            throw ValidationException::withMessages([
+                'email' => 'Credenciales incorrectas.',
+            ]);
         }
 
-        Auth::login($user);
+        if (! auth()->user()->isActive) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            throw ValidationException::withMessages([
+                'email' => 'Su usuario está inactivo. Contacte al administrador.',
+            ]);
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('home'));
@@ -49,6 +54,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }
