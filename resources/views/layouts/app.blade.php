@@ -49,8 +49,14 @@
                     </div>
                     <div data-nav-panel class="hidden absolute left-0 top-full z-50 min-w-[220px] pt-1">
                         <div class="rounded-lg bg-slate-800 border border-slate-600 py-1 shadow-xl">
-                            <a href="#" class="block px-4 py-2.5 text-slate-100 hover:bg-slate-600">Clientes</a>
-                            <a href="#" class="block px-4 py-2.5 text-slate-100 hover:bg-slate-600">Proveedores</a>
+                            <a href="{{ route('crm.customers.index') }}"
+                                class="block px-4 py-2.5 {{ request()->routeIs('crm.customers.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
+                                Clientes
+                            </a>
+                            <a href="{{ route('crm.suppliers.index') }}"
+                                class="block px-4 py-2.5 {{ request()->routeIs('crm.suppliers.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
+                                Proveedores
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -63,8 +69,18 @@
                     </div>
                     <div data-nav-panel class="hidden absolute left-0 top-full z-50 min-w-[220px] pt-1">
                         <div class="rounded-lg bg-slate-800 border border-slate-600 py-1 shadow-xl">
-                            <a href="#" class="block px-4 py-2.5 text-slate-100 hover:bg-slate-600">Artículos</a>
-                            <a href="#" class="block px-4 py-2.5 text-slate-100 hover:bg-slate-600">Movimientos</a>
+                            <a href="{{ route('inventory.categories.index') }}"
+                                class="block px-4 py-2.5 {{ request()->routeIs('inventory.categories.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
+                                Categorías
+                            </a>
+                            <a href="{{ route('inventory.products.index') }}"
+                                class="block px-4 py-2.5 {{ request()->routeIs('inventory.products.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
+                                Artículos
+                            </a>
+                            <a href="{{ route('inventory.movements.index') }}"
+                                class="block px-4 py-2.5 {{ request()->routeIs('inventory.movements.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
+                                Movimientos
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -77,7 +93,10 @@
                     </div>
                     <div data-nav-panel class="hidden absolute left-0 top-full z-50 min-w-[220px] pt-1">
                         <div class="rounded-lg bg-slate-800 border border-slate-600 py-1 shadow-xl">
-                            <a href="#" class="block px-4 py-2.5 text-slate-100 hover:bg-slate-600">Facturas</a>
+                            <a href="{{ route('billing.invoices.index') }}"
+                                class="block px-4 py-2.5 {{ request()->routeIs('billing.invoices.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
+                                Facturas
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -90,7 +109,10 @@
                     </div>
                     <div data-nav-panel class="hidden absolute left-0 top-full z-50 min-w-[220px] pt-1">
                         <div class="rounded-lg bg-slate-800 border border-slate-600 py-1 shadow-xl">
-                            <a href="#" class="block px-4 py-2.5 text-slate-100 hover:bg-slate-600">Reportes generales</a>
+                            <a href="{{ route('reports.index') }}"
+                                class="block px-4 py-2.5 {{ request()->routeIs('reports.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
+                                Reportes generales
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -132,6 +154,8 @@
 
         @yield('content')
     </main>
+
+    @stack('scripts')
 
     <script>
         document.querySelectorAll('[data-nav-dropdown]').forEach(function (el) {
