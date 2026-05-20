@@ -24,7 +24,7 @@ jobs:
 
       - name: Preparar entorno
         run: |
-          cp .env.example .env
+          cp .env
           php artisan key:generate
 
       - name: Ejecutar pruebas (PHPUnit)
