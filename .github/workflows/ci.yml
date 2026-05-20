@@ -25,12 +25,10 @@ jobs:
       - name: Preparar entorno
         run: |
           touch .env
+          echo "APP_KEY=base64:Lw129Q552x8U306hZ6u0800P0L8yW6KxZ6u0800P0L8=" >> .env
           echo "APP_ENV=testing" >> .env
           echo "DB_CONNECTION=sqlite" >> .env
           echo "DB_DATABASE=:memory:" >> .env
-          # Generar una APP_KEY válida y forzar su uso
-          php artisan key:generate
-          php artisan config:clear
 
       - name: Ejecutar pruebas (PHPUnit)
         run: ./vendor/bin/phpunit
