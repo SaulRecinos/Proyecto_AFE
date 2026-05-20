@@ -9,6 +9,8 @@ on:
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
+    env:
+      APP_KEY: base64:fH75/K/3aT5Lz81W/y440fD2U/U+1j3m+X3u3e4f5g6h= 
     steps:
       - uses: actions/checkout@v3
 
@@ -28,7 +30,6 @@ jobs:
           echo "APP_ENV=testing" >> .env
           echo "DB_CONNECTION=sqlite" >> .env
           echo "DB_DATABASE=:memory:" >> .env
-          php artisan key:generate
           php artisan config:clear
 
       - name: Ejecutar pruebas (PHPUnit)
