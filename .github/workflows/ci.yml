@@ -15,7 +15,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2' # Ajusta a la versión que uses
+          php-version: '8.2'
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
           coverage: none
 
@@ -24,8 +24,11 @@ jobs:
 
       - name: Preparar entorno
         run: |
-          cp .env
-          php artisan key:generate
+          # Crear un archivo .env básico para el entorno de pruebas
+          touch .env
+          echo "APP_KEY=base64:$(php artisan key:generate --show)" >> .env
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=:memory:" >> .env
 
       - name: Ejecutar pruebas (PHPUnit)
         run: ./vendor/bin/phpunit
