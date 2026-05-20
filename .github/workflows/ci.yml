@@ -23,12 +23,12 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Preparar entorno
-        run: |
-          # Crear un archivo .env básico para el entorno de pruebas
-          touch .env
-          echo "APP_KEY=base64:$(php artisan key:generate --show)" >> .env
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=:memory:" >> .env
+              run: |
+                touch .env
+                echo "APP_ENV=testing" >> .env
+                echo "DB_CONNECTION=sqlite" >> .env
+                echo "DB_DATABASE=:memory:" >> .env
+                php artisan key:generate
 
       - name: Ejecutar pruebas (PHPUnit)
         run: ./vendor/bin/phpunit
