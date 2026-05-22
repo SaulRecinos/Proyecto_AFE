@@ -106,6 +106,10 @@ class ProductsController extends Controller
                 ->with('error', 'No se puede eliminar: el producto tiene movimientos de inventario.');
         }
 
+        if (\App\Models\InvoiceDetail::query()->where('productId', $product->id)->exists()) {
+            return redirect()->route('inventory.products.index')
+                ->with('error', 'No se puede eliminar: el producto está en facturas.');
+        }
 
         AuditService::logDelete($product, 'products');
         $product->delete();
