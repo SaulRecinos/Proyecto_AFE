@@ -14,9 +14,6 @@ use Illuminate\Database\Seeder;
 
 class AdminModuleSeeder extends Seeder
 {
-    /**
-     * 
-     */
     public function run(): void
     {
         $role = Roles::firstOrCreate(
