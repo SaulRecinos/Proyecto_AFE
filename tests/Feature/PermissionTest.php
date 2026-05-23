@@ -85,18 +85,18 @@ class PermissionTest extends TestCase
     public static function moduleRoutes(): array
     {
         return [
-            'admin users'         => ['/admin/users'],
-            'admin roles'         => ['/admin/roles'],
-            'crm customers'       => ['/crm/customers'],
-            'crm suppliers'       => ['/crm/suppliers'],
-            'inventory products'  => ['/inventory/products'],
-            'inventory categories'=> ['/inventory/categories'],
+            'admin users' => ['/admin/users'],
+            'admin roles' => ['/admin/roles'],
+            'crm customers' => ['/crm/customers'],
+            'crm suppliers' => ['/crm/suppliers'],
+            'inventory products' => ['/inventory/products'],
+            'inventory categories' => ['/inventory/categories'],
             'inventory movements' => ['/inventory/movements'],
-            'billing invoices'    => ['/billing/invoices'],
-            'reports index'       => ['/reports'],
-            'reports sales'       => ['/reports/sales'],
-            'reports low-stock'   => ['/reports/low-stock'],
-            'reports pending'     => ['/reports/pending'],
+            'billing invoices' => ['/billing/invoices'],
+            'reports index' => ['/reports'],
+            'reports sales' => ['/reports/sales'],
+            'reports low-stock' => ['/reports/low-stock'],
+            'reports pending' => ['/reports/pending'],
         ];
     }
 }

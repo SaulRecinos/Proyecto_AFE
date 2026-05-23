@@ -27,11 +27,11 @@ abstract class TestCase extends BaseTestCase
 
     protected function createRoleWithPermissions(array $codes = []): Roles
     {
-        $code = strtoupper('T' . substr(uniqid(), -8));
+        $code = strtoupper('T'.substr(uniqid(), -8));
         $role = Roles::create([
-            'name'      => 'Role ' . $code,
-            'code'      => $code,
-            'isActive'  => true,
+            'name' => 'Role '.$code,
+            'code' => $code,
+            'isActive' => true,
             'createdBy' => 1,
         ]);
 

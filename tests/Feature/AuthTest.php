@@ -24,19 +24,19 @@ class AuthTest extends TestCase
     public static function protectedRoutes(): array
     {
         return [
-            'home'                => ['/'],
-            'admin users'         => ['/admin/users'],
-            'admin roles'         => ['/admin/roles'],
-            'crm customers'       => ['/crm/customers'],
-            'crm suppliers'       => ['/crm/suppliers'],
-            'inventory categories'=> ['/inventory/categories'],
-            'inventory products'  => ['/inventory/products'],
+            'home' => ['/'],
+            'admin users' => ['/admin/users'],
+            'admin roles' => ['/admin/roles'],
+            'crm customers' => ['/crm/customers'],
+            'crm suppliers' => ['/crm/suppliers'],
+            'inventory categories' => ['/inventory/categories'],
+            'inventory products' => ['/inventory/products'],
             'inventory movements' => ['/inventory/movements'],
-            'billing invoices'    => ['/billing/invoices'],
-            'reports index'       => ['/reports'],
-            'reports sales'       => ['/reports/sales'],
-            'reports low-stock'   => ['/reports/low-stock'],
-            'reports pending'     => ['/reports/pending'],
+            'billing invoices' => ['/billing/invoices'],
+            'reports index' => ['/reports'],
+            'reports sales' => ['/reports/sales'],
+            'reports low-stock' => ['/reports/low-stock'],
+            'reports pending' => ['/reports/pending'],
         ];
     }
 }

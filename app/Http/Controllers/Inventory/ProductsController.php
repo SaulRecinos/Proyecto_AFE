@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Inventory;
 use App\Http\Controllers\Concerns\ErpControllerHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\InvoiceDetail;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Services\AuditService;
@@ -106,7 +107,7 @@ class ProductsController extends Controller
                 ->with('error', 'No se puede eliminar: el producto tiene movimientos de inventario.');
         }
 
-        if (\App\Models\InvoiceDetail::query()->where('productId', $product->id)->exists()) {
+        if (InvoiceDetail::query()->where('productId', $product->id)->exists()) {
             return redirect()->route('inventory.products.index')
                 ->with('error', 'No se puede eliminar: el producto está en facturas.');
         }
