@@ -1,70 +1,70 @@
 @extends('layouts.app')
-
 @section('title', 'Roles')
 
-@section('content')
-<div class="space-y-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 class="text-2xl font-bold text-gray-800">Roles</h1>
-        <a href="{{ route('admin.roles.create') }}" class="inline-flex justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700">Nuevo rol</a>
-    </div>
+@section('header')
+<div class="flex items-center justify-between w-full">
+    <h1 class="text-lg font-semibold text-slate-800">Roles</h1>
+    <a href="{{ route('admin.roles.create') }}"
+       class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Nuevo rol
+    </a>
+</div>
+@endsection
 
-    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
-                <thead class="bg-gray-50 border-b border-gray-200">
-                    <tr>
-                        <th class="px-4 py-3 font-semibold text-gray-600">Nombre</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600">Código</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600">Estado</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600">Usuarios</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600">Permisos</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600 text-right">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @forelse ($roles as $role)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3 font-medium text-gray-900">{{ $role->name }}</td>
-                            <td class="px-4 py-3 text-gray-600"><code class="text-xs bg-gray-100 px-1 rounded">{{ $role->code }}</code></td>
-                            <td class="px-4 py-3">
-                                @if ($role->isActive)
-                                    <span class="text-emerald-700 text-xs font-medium">Activo</span>
-                                @else
-                                    <span class="text-gray-500 text-xs">Inactivo</span>
-                                @endif
-                            </td>
-                            <td class="px-4 py-3 text-gray-600 text-xs max-w-sm align-top">
-                                @if ($role->users->isEmpty())
-                                    <span class="text-gray-400">—</span>
-                                @else
-                                    {{ $role->users->pluck('name')->join(', ') }}
-                                @endif
-                            </td>
-                            <td class="px-4 py-3 text-gray-600 text-xs max-w-sm align-top">
-                                @if ($role->permissions->isEmpty())
-                                    <span class="text-gray-400">—</span>
-                                @else
-                                    {{ $role->permissions->pluck('name')->join(', ') }}
-                                @endif
-                            </td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <a href="{{ route('admin.roles.edit', $role) }}" class="text-blue-600 hover:underline">Editar</a>
-                                <form action="{{ route('admin.roles.destroy', $role) }}" method="post" class="inline" onsubmit="return confirm('¿Eliminar este rol?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:underline">Eliminar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-4 py-8 text-center text-gray-500">No hay roles.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+@section('content')
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Nombre</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Código</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Usuarios</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Módulos</th>
+                    <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @forelse($roles as $role)
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-4 py-3 font-medium text-slate-900">{{ $role->name }}</td>
+                    <td class="px-4 py-3">
+                        <code class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">{{ $role->code }}</code>
+                    </td>
+                    <td class="px-4 py-3">
+                        @if($role->isActive)
+                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Activo</span>
+                        @else
+                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">Inactivo</span>
+                        @endif
+                    </td>
+                    <td class="px-4 py-3 text-slate-600 text-xs">
+                        {{ $role->users->isEmpty() ? '—' : $role->users->pluck('name')->join(', ') }}
+                    </td>
+                    <td class="px-4 py-3 text-slate-600 text-xs">
+                        {{ $role->permissions->isEmpty() ? '—' : $role->permissions->pluck('name')->join(', ') }}
+                    </td>
+                    <td class="px-4 py-3 text-right">
+                        <div class="flex items-center justify-end gap-3">
+                            <a href="{{ route('admin.roles.edit', $role) }}"
+                               class="text-indigo-600 hover:text-indigo-800 text-xs font-medium transition">Editar</a>
+                            <form action="{{ route('admin.roles.destroy', $role) }}" method="post" class="inline"
+                                  onsubmit="return confirm('¿Eliminar el rol «{{ $role->name }}»?');">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-medium transition">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" class="px-4 py-10 text-center text-slate-400 text-sm">No hay roles registrados.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection
