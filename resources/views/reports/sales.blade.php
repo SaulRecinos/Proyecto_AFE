@@ -1,42 +1,51 @@
 @extends('layouts.app')
 @section('title', 'Ventas por período')
+
+@section('header')
+<div class="flex items-center gap-3 w-full">
+    <a href="{{ route('reports.index') }}" class="text-slate-400 hover:text-slate-600 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    </a>
+    <div>
+        <h1 class="text-lg font-semibold text-slate-800">Ventas por período</h1>
+        <p class="text-xs text-slate-400">Total histórico: <strong class="text-slate-600">{{ format_usd($totalGeneral) }}</strong></p>
+    </div>
+</div>
+@endsection
+
 @section('content')
 <div class="space-y-6">
-    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800">Ventas por período</h1>
-            <p class="text-sm text-slate-500 mt-1">Total histórico: <strong>{{ format_usd($totalGeneral) }}</strong></p>
-        </div>
-        <a href="{{ route('reports.index') }}" class="text-sm text-blue-600 hover:underline">← Panel de reportes</a>
-    </div>
 
     <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-        <h2 class="text-sm font-semibold text-gray-800 mb-4">Evolución de ventas</h2>
+        <h2 class="text-sm font-semibold text-slate-800 mb-4">Evolución de ventas</h2>
         <canvas id="salesDetailChart" height="100"></canvas>
     </div>
 
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <table class="w-full text-sm">
-            <thead class="bg-gray-50 border-b border-gray-200">
-                <tr>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-600">Período</th>
-                    <th class="px-4 py-3 text-center font-semibold text-gray-600">Facturas</th>
-                    <th class="px-4 py-3 text-right font-semibold text-gray-600">Total ventas</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-                @forelse($sales->sortByDesc('period') as $row)
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3 font-medium">{{ $row->period }}</td>
-                    <td class="px-4 py-3 text-center">{{ $row->invoiceCount }}</td>
-                    <td class="px-4 py-3 text-right">{{ format_usd($row->totalSales) }}</td>
-                </tr>
-                @empty
-                <tr><td colspan="3" class="px-4 py-8 text-center text-gray-500">Sin datos de ventas. Emita facturas para generar el reporte.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Período</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Facturas</th>
+                        <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Total ventas</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    @forelse($sales->sortByDesc('period') as $row)
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-4 py-3 font-medium text-slate-900">{{ $row->period }}</td>
+                        <td class="px-4 py-3 text-center text-slate-700">{{ $row->invoiceCount }}</td>
+                        <td class="px-4 py-3 text-right font-semibold text-slate-700">{{ format_usd($row->totalSales) }}</td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="3" class="px-4 py-10 text-center text-slate-400 text-sm">Sin datos de ventas. Emita facturas para generar el reporte.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
+
 </div>
 @endsection
 
