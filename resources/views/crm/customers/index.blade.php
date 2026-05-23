@@ -1,50 +1,64 @@
 @extends('layouts.app')
 @section('title', 'Clientes')
+
+@section('header')
+<div class="flex items-center justify-between w-full">
+    <h1 class="text-lg font-semibold text-slate-800">Clientes</h1>
+    <a href="{{ route('crm.customers.create') }}"
+       class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Nuevo cliente
+    </a>
+</div>
+@endsection
+
 @section('content')
-<div class="space-y-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 class="text-2xl font-bold text-gray-800">Clientes</h1>
-        <a href="{{ route('crm.customers.create') }}" class="inline-flex justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700">Nuevo cliente</a>
-    </div>
-    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
-                <thead class="bg-gray-50 border-b border-gray-200">
-                    <tr>
-                        <th class="px-4 py-3 font-semibold text-gray-600">Nombre</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600">Tipo</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600">NIT</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600">Contacto</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600">Estado</th>
-                        <th class="px-4 py-3 font-semibold text-gray-600 text-right">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @forelse ($customers as $customer)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3 font-medium">{{ $customer->fullName }}</td>
-                            <td class="px-4 py-3">{{ $customer->customerType?->name ?? '—' }}</td>
-                            <td class="px-4 py-3">{{ $customer->taxId ?? '—' }}</td>
-                            <td class="px-4 py-3 text-gray-600">{{ $customer->email ?? $customer->phoneNumber ?? '—' }}</td>
-                            <td class="px-4 py-3">
-                                <span class="text-xs font-medium {{ $customer->isActive ? 'text-emerald-700' : 'text-gray-500' }}">
-                                    {{ $customer->isActive ? 'Activo' : 'Inactivo' }}
-                                </span>
-                            </td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <a href="{{ route('crm.customers.edit', $customer) }}" class="text-blue-600 hover:underline">Editar</a>
-                                <form action="{{ route('crm.customers.destroy', $customer) }}" method="post" class="inline" onsubmit="return confirm('¿Eliminar este cliente?');">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:underline">Eliminar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">No hay clientes registrados.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Nombre</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Tipo</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">NIT</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Contacto</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
+                    <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @forelse($customers as $customer)
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-4 py-3 font-medium text-slate-900">{{ $customer->fullName }}</td>
+                    <td class="px-4 py-3 text-slate-600">{{ $customer->customerType?->name ?? '—' }}</td>
+                    <td class="px-4 py-3 text-slate-600 font-mono text-xs">{{ $customer->taxId ?? '—' }}</td>
+                    <td class="px-4 py-3 text-slate-600">{{ $customer->email ?? $customer->phoneNumber ?? '—' }}</td>
+                    <td class="px-4 py-3">
+                        @if($customer->isActive)
+                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Activo</span>
+                        @else
+                            <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">Inactivo</span>
+                        @endif
+                    </td>
+                    <td class="px-4 py-3 text-right">
+                        <div class="flex items-center justify-end gap-3">
+                            <a href="{{ route('crm.customers.edit', $customer) }}"
+                               class="text-indigo-600 hover:text-indigo-800 text-xs font-medium transition">Editar</a>
+                            <form action="{{ route('crm.customers.destroy', $customer) }}" method="post" class="inline"
+                                  onsubmit="return confirm('¿Eliminar al cliente «{{ $customer->fullName }}»?');">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-medium transition">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" class="px-4 py-10 text-center text-slate-400 text-sm">No hay clientes registrados.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection
