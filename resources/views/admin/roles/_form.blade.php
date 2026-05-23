@@ -25,21 +25,52 @@
         </select>
     </div>
 
+    @php
+        $modulePerms = $permissions->filter(fn($p) => str_ends_with($p->code, '_MOD'));
+        $actionPerms = $permissions->reject(fn($p) => str_ends_with($p->code, '_MOD'));
+        $checkedIds   = array_map('strval', old('permission_ids', $selectedPermissionIds));
+    @endphp
+
     <div>
-        <span class="block text-sm font-medium text-gray-700 mb-2">Permisos asignados</span>
-        <p class="text-xs text-gray-500 mb-3">Selecciona los permisos que tendrá este rol (tabla pivote <code class="bg-gray-100 px-1 rounded">rolePermissions</code>).</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3">
-            @foreach ($permissions as $permission)
+        <span class="block text-sm font-medium text-gray-700 mb-1">Acceso a módulos</span>
+        <p class="text-xs text-gray-500 mb-3">
+            Controla qué secciones del menú puede ver y acceder el usuario.
+            Un usuario sin ningún módulo activado no verá nada tras iniciar sesión.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 border border-blue-100 bg-blue-50 rounded-lg p-3">
+            @foreach ($modulePerms as $permission)
                 <label class="flex items-start gap-2 text-sm cursor-pointer">
                     <input type="checkbox" name="permission_ids[]" value="{{ $permission->id }}"
                         class="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                        @checked(in_array((string) $permission->id, array_map('strval', old('permission_ids', $selectedPermissionIds))))>
-                    <span><span class="font-medium text-gray-800">{{ $permission->name }}</span>
-                        <span class="text-gray-500 text-xs block">{{ $permission->code }}</span></span>
+                        @checked(in_array((string) $permission->id, $checkedIds))>
+                    <span>
+                        <span class="font-medium text-gray-800">{{ $permission->name }}</span>
+                        <span class="text-gray-500 text-xs block">{{ $permission->code }}</span>
+                    </span>
                 </label>
             @endforeach
         </div>
     </div>
+
+    @if($actionPerms->isNotEmpty())
+    <div>
+        <span class="block text-sm font-medium text-gray-700 mb-1">Permisos de acciones</span>
+        <p class="text-xs text-gray-500 mb-3">Controla operaciones específicas dentro de cada módulo.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 border border-gray-200 rounded-lg p-3">
+            @foreach ($actionPerms as $permission)
+                <label class="flex items-start gap-2 text-sm cursor-pointer">
+                    <input type="checkbox" name="permission_ids[]" value="{{ $permission->id }}"
+                        class="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        @checked(in_array((string) $permission->id, $checkedIds))>
+                    <span>
+                        <span class="font-medium text-gray-800">{{ $permission->name }}</span>
+                        <span class="text-gray-500 text-xs block">{{ $permission->code }}</span>
+                    </span>
+                </label>
+            @endforeach
+        </div>
+    </div>
+    @endif
 
     <div class="flex gap-3 pt-2">
         <button type="submit" class="inline-flex justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700">

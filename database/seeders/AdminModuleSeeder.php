@@ -96,12 +96,12 @@ class AdminModuleSeeder extends Seeder
             );
         }
 
-        $permissionCodes = ['USR_CREATE', 'PROD_EDIT', 'REP_VIEW', 'INV_PROCC'];
         foreach ([
-            ['name' => 'Create User', 'code' => 'USR_CREATE'],
-            ['name' => 'Edit Product', 'code' => 'PROD_EDIT'],
-            ['name' => 'View Reports', 'code' => 'REP_VIEW'],
-            ['name' => 'Process Invoice', 'code' => 'INV_PROCC'],
+            ['name' => 'Admin Module',     'code' => 'ADMIN_MOD'],
+            ['name' => 'CRM Module',       'code' => 'CRM_MOD'],
+            ['name' => 'Inventory Module', 'code' => 'INV_MOD'],
+            ['name' => 'Billing Module',   'code' => 'BILL_MOD'],
+            ['name' => 'Reports Module',   'code' => 'REP_MOD'],
         ] as $row) {
             Permissions::firstOrCreate(
                 ['code' => $row['code']],
@@ -109,7 +109,7 @@ class AdminModuleSeeder extends Seeder
             );
         }
 
-        $ids = Permissions::whereIn('code', $permissionCodes)->pluck('id');
+        $ids = Permissions::pluck('id');
         $role->permissions()->sync($ids);
     }
 }

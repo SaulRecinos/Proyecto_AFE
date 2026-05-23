@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\PermissionsController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Auth\LoginController;
@@ -23,28 +22,27 @@ Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')-
 Route::middleware('auth')->group(function () {
     Route::get('/', fn () => view('home'))->name('home');
 
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware('permission:ADMIN_MOD')->group(function () {
         Route::resource('roles', RolesController::class)->except(['show']);
-        Route::resource('permissions', PermissionsController::class)->except(['show']);
         Route::resource('users', UsersController::class)->except(['show']);
     });
 
-    Route::prefix('crm')->name('crm.')->group(function () {
+    Route::prefix('crm')->name('crm.')->middleware('permission:CRM_MOD')->group(function () {
         Route::resource('customers', CustomersController::class)->except(['show']);
         Route::resource('suppliers', SuppliersController::class)->except(['show']);
     });
 
-    Route::prefix('inventory')->name('inventory.')->group(function () {
+    Route::prefix('inventory')->name('inventory.')->middleware('permission:INV_MOD')->group(function () {
         Route::resource('categories', CategoriesController::class)->except(['show']);
         Route::resource('products', ProductsController::class)->except(['show']);
         Route::resource('movements', InventoryMovementsController::class)->only(['index', 'create', 'store', 'destroy']);
     });
 
-    Route::prefix('billing')->name('billing.')->group(function () {
+    Route::prefix('billing')->name('billing.')->middleware('permission:BILL_MOD')->group(function () {
         Route::resource('invoices', InvoicesController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
     });
 
-    Route::prefix('reports')->name('reports.')->group(function () {
+    Route::prefix('reports')->name('reports.')->middleware('permission:REP_MOD')->group(function () {
         Route::get('/', [ReportsController::class, 'index'])->name('index');
         Route::get('/low-stock', [ReportsController::class, 'lowStock'])->name('low-stock');
         Route::get('/sales', [ReportsController::class, 'sales'])->name('sales');
