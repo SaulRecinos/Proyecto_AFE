@@ -1,29 +1,56 @@
 @extends('layouts.app')
 @section('title', 'Movimientos de inventario')
+
+@section('header')
+<div class="flex items-center justify-between w-full">
+    <h1 class="text-lg font-semibold text-slate-800">Movimientos de inventario</h1>
+    <a href="{{ route('inventory.movements.create') }}"
+       class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Registrar movimiento
+    </a>
+</div>
+@endsection
+
 @section('content')
-<div class="space-y-6">
-    <div class="flex justify-between"><h1 class="text-2xl font-bold">Movimientos de inventario</h1>
-        <a href="{{ route('inventory.movements.create') }}" class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg">Registrar movimiento</a></div>
-    <div class="bg-white rounded-xl border shadow-sm overflow-x-auto">
-        <table class="w-full text-sm"><thead class="bg-gray-50 border-b"><tr>
-            <th class="px-4 py-3 text-left">Fecha</th><th class="px-4 py-3 text-left">Producto</th>
-            <th class="px-4 py-3">Tipo</th><th class="px-4 py-3 text-center">Cantidad</th>
-            <th class="px-4 py-3 text-left">Motivo</th><th class="px-4 py-3 text-right">Acciones</th>
-        </tr></thead><tbody class="divide-y">
-        @forelse($movements as $m)
-        <tr>
-            <td class="px-4 py-3">{{ $m->createdAt?->format('d/m/Y H:i') }}</td>
-            <td class="px-4 py-3">{{ $m->product?->name }}</td>
-            <td class="px-4 py-3 text-center">{{ $m->movementType?->name }}</td>
-            <td class="px-4 py-3 text-center font-medium">{{ $m->quantity }}</td>
-            <td class="px-4 py-3 text-gray-600">{{ $m->reason ?? '—' }}</td>
-            <td class="px-4 py-3 text-right">
-                <form action="{{ route('inventory.movements.destroy',$m) }}" method="post" class="inline" onsubmit="return confirm('¿Revertir movimiento?')">@csrf @method('DELETE')
-                <button class="text-red-600 text-xs">Revertir</button></form>
-            </td>
-        </tr>
-        @empty<tr><td colspan="6" class="p-8 text-center text-gray-500">Sin movimientos</td></tr>@endforelse
-        </tbody></table>
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Fecha</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Producto</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Tipo</th>
+                    <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Cantidad</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Motivo</th>
+                    <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @forelse($movements as $m)
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-4 py-3 text-slate-500 text-xs">{{ $m->createdAt?->format('d/m/Y H:i') }}</td>
+                    <td class="px-4 py-3 font-medium text-slate-900">{{ $m->product?->name }}</td>
+                    <td class="px-4 py-3">
+                        <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                            {{ $m->movementType?->name }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-center font-semibold text-slate-700">{{ $m->quantity }}</td>
+                    <td class="px-4 py-3 text-slate-500">{{ $m->reason ?? '—' }}</td>
+                    <td class="px-4 py-3 text-right">
+                        <form action="{{ route('inventory.movements.destroy', $m) }}" method="post" class="inline"
+                              onsubmit="return confirm('¿Revertir este movimiento?');">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-medium transition">Revertir</button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
+                <tr><td colspan="6" class="px-4 py-10 text-center text-slate-400 text-sm">No hay movimientos registrados.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection
