@@ -17,7 +17,7 @@
                     $caret = '<svg class="w-4 h-4 opacity-70 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
                 @endphp
 
-                {{-- Módulo: Administración (hover: abrir / salir ratón: cerrar) --}}
+                @if(Auth::user()->hasPermission('ADMIN_MOD'))
                 <div data-nav-dropdown class="relative z-50 inline-block text-left">
                     <div class="flex cursor-default items-center gap-1 px-2 py-1 rounded hover:bg-slate-800 text-slate-200 select-none">
                         <span>Administración</span>
@@ -29,10 +29,6 @@
                             class="block px-4 py-2.5 {{ request()->routeIs('admin.roles.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
                             Roles
                         </a>
-                        <a href="{{ route('admin.permissions.index') }}"
-                            class="block px-4 py-2.5 {{ request()->routeIs('admin.permissions.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
-                            Permisos
-                        </a>
                         <a href="{{ route('admin.users.index') }}"
                             class="block px-4 py-2.5 {{ request()->routeIs('admin.users.*') ? 'bg-slate-700 text-white font-medium' : 'text-slate-100 hover:bg-slate-600' }}">
                             Usuarios
@@ -40,8 +36,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
-                {{-- Módulo: Clientes y proveedores --}}
+                @if(Auth::user()->hasPermission('CRM_MOD'))
                 <div data-nav-dropdown class="relative z-50 inline-block text-left">
                     <div class="flex cursor-default items-center gap-1 px-2 py-1 rounded hover:bg-slate-800 text-slate-200 select-none">
                         <span>Clientes y proveedores</span>
@@ -60,8 +57,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
-                {{-- Módulo: Inventario --}}
+                @if(Auth::user()->hasPermission('INV_MOD'))
                 <div data-nav-dropdown class="relative z-50 inline-block text-left">
                     <div class="flex cursor-default items-center gap-1 px-2 py-1 rounded hover:bg-slate-800 text-slate-200 select-none">
                         <span>Inventario</span>
@@ -84,8 +82,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
-                {{-- Módulo: Facturación --}}
+                @if(Auth::user()->hasPermission('BILL_MOD'))
                 <div data-nav-dropdown class="relative z-50 inline-block text-left">
                     <div class="flex cursor-default items-center gap-1 px-2 py-1 rounded hover:bg-slate-800 text-slate-200 select-none">
                         <span>Facturación</span>
@@ -100,8 +99,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
-                {{-- Módulo: Reportes --}}
+                @if(Auth::user()->hasPermission('REP_MOD'))
                 <div data-nav-dropdown class="relative z-50 inline-block text-left">
                     <div class="flex cursor-default items-center gap-1 px-2 py-1 rounded hover:bg-slate-800 text-slate-200 select-none">
                         <span>Reportes</span>
@@ -116,6 +116,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="flex items-center gap-3">
                 @auth
