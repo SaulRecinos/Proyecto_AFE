@@ -1,0 +1,30 @@
+name: Security Scan
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # every Monday at 09:00 UTC
+  workflow_dispatch:       # allow manual trigger from GitHub UI
+
+jobs:
+  audit:
+    name: Composer Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
+
+      - name: Check for known vulnerabilities
+        run: composer audit
+
+      - name: Check for outdated direct dependencies
+        run: composer outdated --direct
+        continue-on-error: true
