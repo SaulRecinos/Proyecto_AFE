@@ -140,11 +140,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 labels: topProducts.map(r => r.label),
                 datasets: [{
                     label: 'Unidades vendidas',
-                    data: topProducts.map(r => r.unitsSold),
+                    data: topProducts.map(r => Number(r.unitsSold)),
                     backgroundColor: 'rgba(16, 185, 129, 0.7)'
                 }]
             },
-            options: { ...chartDefaults, indexAxis: 'y' }
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
+                scales: {
+                    x: { grid: { color: '#f3f4f6' }, beginAtZero: true },
+                    y: { grid: { display: false } }
+                }
+            }
         });
     }
 
